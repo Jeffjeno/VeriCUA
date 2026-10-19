@@ -87,23 +87,6 @@ bash train/rft/start_env.sh   # environment services
 bash train/rft/run.sh         # trainer
 ```
 
-Terminal reward:
-
-| Final verdict | No Probe | Probe used |
-|---|---:|---:|
-| Correct | +1.0 | +0.7 |
-| Incorrect | −0.7 | −0.3 |
-| Unresolved / invalid | −1.0 | −1.0 |
-
-## Repository
-
-| Directory | Contents |
-|---|---|
-| `eval_runtime/`, `mm_agents/`, `agent_runtime/` | Judge–Probe loop, replay evaluation, Actor/Judge/Probe implementations |
-| `rollout_runtime/`, `train/` | Actor rollouts, cold-start data, Judge RL launchers |
-| `third_party/slime/` | Customized [Slime](https://github.com/THUDM/slime) runtime |
-| `desktop_env/`, `evaluation_examples/` | OSWorld environments and tasks |
-| `config/`, `suites/`, `scripts/`, `tests/` | Configs, benchmark launchers, utilities, tests |
 
 ## Citation
 
@@ -118,4 +101,4 @@ Terminal reward:
 
 ## Acknowledgements
 
-Built on [OSWorld](https://github.com/xlang-ai/OSWorld) and [Slime](https://github.com/THUDM/slime). Released under [Apache-2.0](LICENSE); see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Built on [OSWorld](https://github.com/xlang-ai/OSWorld) and [Slime](https://github.com/THUDM/slime). 
