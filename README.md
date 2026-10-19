@@ -8,12 +8,12 @@
 [![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB.svg)](#installation)
 [![License](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
 
-Zhizhou Wang<sup>1,*</sup>, Yaxi Lu<sup>2,*</sup>, Zhong Zhang<sup>3,†</sup>, Zikun Hu<sup>4</sup>, Xin Cong<sup>2</sup>, Yankai Lin<sup>5</sup>, Fangming Liu<sup>6,†</sup>
+Zhizhou Wang<sup>1,&ast;</sup>, Yaxi Lu<sup>2,&ast;</sup>, Zhong Zhang<sup>3,†</sup>, Zikun Hu<sup>4</sup>, Xin Cong<sup>2</sup>, Yankai Lin<sup>5</sup>, Fangming Liu<sup>6,†</sup>
 
 <sup>1</sup>Southwest Jiaotong University · <sup>2</sup>Tsinghua University · <sup>3</sup>University of Electronic Science and Technology of China<br>
 <sup>4</sup>National University of Singapore · <sup>5</sup>Renmin University of China · <sup>6</sup>Peng Cheng Laboratory
 
-<sup>*</sup>Equal contribution · <sup>†</sup>Corresponding authors
+<sup>&ast;</sup>Equal contribution · <sup>†</sup>Corresponding authors
 
 </div>
 
