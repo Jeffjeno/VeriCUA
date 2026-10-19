@@ -1,0 +1,13 @@
+[
+  {
+    "host": "<CLUSTER_HOST_IP>",
+    "port": 54321,
+    "username": "",
+    "password": "",
+    "protocol": "http",
+    "provider": "local",
+    "type": "http",
+    "country": "",
+    "note": "Local HTTP proxy on 127.0.0.1:54321"
+  }
+]

@@ -1,0 +1,200 @@
+import logging
+import os
+from copy import deepcopy
+
+import wandb
+
+logger = logging.getLogger(__name__)
+
+def _is_offline_mode(args) -> bool:
+
+    if args.wandb_mode:
+        return args.wandb_mode == "offline"
+    return os.environ.get("WANDB_MODE") == "offline"
+
+def init_wandb_primary(args):
+    if not args.use_wandb:
+        args.wandb_run_id = None
+        return
+
+    if args.wandb_mode:
+        os.environ["WANDB_MODE"] = args.wandb_mode
+        if args.wandb_mode == "offline":
+            logger.info("W&B offline mode enabled. Data will be saved locally.")
+        elif args.wandb_mode == "disabled":
+            logger.info("W&B disabled mode enabled. No data will be logged.")
+        elif args.wandb_mode == "online":
+            logger.info("W&B online mode enabled. Data will be uploaded to cloud.")
+
+    offline = _is_offline_mode(args)
+
+    if (not offline) and args.wandb_key is not None:
+        wandb.login(key=args.wandb_key, host=args.wandb_host)
+
+    if args.wandb_random_suffix:
+        group = args.wandb_group + "_" + wandb.util.generate_id()
+        run_name = f"{group}-RANK_{args.rank}"
+    else:
+        group = args.wandb_group
+        run_name = args.wandb_group
+
+    init_kwargs = {
+        "entity": args.wandb_team,
+        "project": args.wandb_project,
+        "group": group,
+        "name": run_name,
+        "config": _compute_config_for_logging(args),
+    }
+
+    if offline:
+        init_kwargs["settings"] = wandb.Settings(mode="offline")
+    else:
+        init_kwargs["settings"] = wandb.Settings(mode="shared", x_primary=True)
+
+    if args.wandb_dir:
+
+        os.makedirs(args.wandb_dir, exist_ok=True)
+        init_kwargs["dir"] = args.wandb_dir
+        logger.info(f"W&B logs will be stored in: {args.wandb_dir}")
+
+    wandb.init(**init_kwargs)
+
+    _init_wandb_common()
+
+    args.wandb_run_id = wandb.run.id
+
+def reinit_wandb_primary_with_open_metrics(args, router_addr):
+
+    if not args.use_wandb or _is_offline_mode(args):
+        return
+    if getattr(args, "wandb_mode", None) == "disabled":
+        return
+    if router_addr is None:
+        return
+    wandb_run_id = getattr(args, "wandb_run_id", None)
+    if wandb_run_id is None:
+        return
+
+    import sglang_router
+
+    if "slime" not in sglang_router.__version__:
+        logger.warning(
+            "Only customized sglang_router from https://github.com/zhuzilin/sgl-router supports uploading metrics."
+        )
+        return
+
+    logger.info(f"Re-initializing primary W&B with SGLang metrics at {router_addr}.")
+
+    wandb.finish()
+
+    init_kwargs = {
+        "id": wandb_run_id,
+        "entity": args.wandb_team,
+        "project": args.wandb_project,
+        "resume": "allow",
+        "reinit": True,
+        "settings": wandb.Settings(
+            mode="shared",
+            x_primary=True,
+            x_stats_open_metrics_endpoints={
+                "sgl_engine": f"{router_addr}/engine_metrics",
+            },
+            x_stats_open_metrics_filters={
+                "sgl_engine.*": {},
+            },
+        ),
+    }
+
+    if args.wandb_dir:
+        os.makedirs(args.wandb_dir, exist_ok=True)
+        init_kwargs["dir"] = args.wandb_dir
+
+    wandb.init(**init_kwargs)
+    _init_wandb_common()
+
+def _compute_config_for_logging(args):
+    output = _args_to_config_dict(args)
+
+    whitelist_env_vars = [
+        "SLURM_JOB_ID",
+
+    ]
+    output["env_vars"] = {k: v for k, v in os.environ.items() if k in whitelist_env_vars}
+
+    if getattr(args, "use_critic", False):
+        critic_args = _get_role_args_for_logging(args, role="critic")
+        output.update(_prefix_config_keys(_args_to_config_dict(critic_args), "critic"))
+
+    return output
+
+def _args_to_config_dict(args):
+    return deepcopy(args.__dict__)
+
+def _prefix_config_keys(config, prefix):
+    return {f"{prefix}/{key}": value for key, value in config.items()}
+
+def _get_role_args_for_logging(args, role):
+    if getattr(args, "megatron_config_path", None) is None:
+        return args
+
+    from slime.utils.arguments import parse_megatron_role_args
+
+    return parse_megatron_role_args(args, args.megatron_config_path, role=role)
+
+def _compute_secondary_config_for_logging(args, role=None):
+    config = _args_to_config_dict(args)
+    if role == "critic":
+        return _prefix_config_keys(config, "critic")
+    return config
+
+def init_wandb_secondary(args, role=None):
+    wandb_run_id = getattr(args, "wandb_run_id", None)
+    if wandb_run_id is None:
+        return
+
+    if args.wandb_mode:
+        os.environ["WANDB_MODE"] = args.wandb_mode
+
+    offline = _is_offline_mode(args)
+
+    if (not offline) and args.wandb_key is not None:
+        wandb.login(key=args.wandb_key, host=args.wandb_host)
+
+    if offline:
+        settings_kwargs = dict(mode="offline")
+    else:
+        settings_kwargs = dict(
+            mode="shared",
+            x_primary=False,
+            x_update_finish_state=False,
+        )
+
+    init_kwargs = {
+        "id": wandb_run_id,
+        "entity": args.wandb_team,
+        "project": args.wandb_project,
+        "config": _compute_secondary_config_for_logging(args, role=role),
+        "resume": "allow",
+        "reinit": True,
+        "settings": wandb.Settings(**settings_kwargs),
+    }
+
+    if args.wandb_dir:
+        os.makedirs(args.wandb_dir, exist_ok=True)
+        init_kwargs["dir"] = args.wandb_dir
+
+    wandb.init(**init_kwargs)
+
+    _init_wandb_common()
+
+def _init_wandb_common():
+    wandb.define_metric("train/step")
+    wandb.define_metric("train/*", step_metric="train/step")
+    wandb.define_metric("rollout/step")
+    wandb.define_metric("rollout/*", step_metric="rollout/step")
+    wandb.define_metric("multi_turn/*", step_metric="rollout/step")
+    wandb.define_metric("passrate/*", step_metric="rollout/step")
+    wandb.define_metric("eval/step")
+    wandb.define_metric("eval/*", step_metric="eval/step")
+    wandb.define_metric("perf/*", step_metric="rollout/step")
+    wandb.define_metric("mismatch/*", step_metric="rollout/step")

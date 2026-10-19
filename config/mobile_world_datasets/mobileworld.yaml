@@ -1,0 +1,9 @@
+name: mobileworld
+benchmark: mobile_world
+format: stable_replay_trajectory
+description: "MobileWorld replay dataset."
+
+paths:
+  dataset_root: data/mobileworld
+  manifest: data/mobileworld/stable_manifest.jsonl
+  trajectories: data/mobileworld/trajectories

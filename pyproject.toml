@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vericua"
+version = "0.1.0"
+description = "GUI agent verification, training and replay evaluation"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {file = "LICENSE"}
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["train/rft/requirements-env.txt"]}
+
+[tool.setuptools.packages.find]
+include = ["agent_runtime*", "desktop_env*", "eval_runtime*", "mm_agents*", "multinode_service*", "rollout_runtime*", "train*", "scripts.webarena_data_replay*"]
+exclude = ["tests*", "third_party*"]

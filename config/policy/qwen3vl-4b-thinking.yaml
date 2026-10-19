@@ -1,0 +1,19 @@
+model: 
+  model_name: Qwen3-VL-4B-Thinking
+  api_key: xxxxx
+  base_url: http://<CLUSTER_HOST_IP>:30002/v1
+  max_tokens: 4096
+  temperature: 1
+platform: ubuntu
+action_space: pyautogui
+observation_type: screenshot
+coordinate_type: relative
+add_thought_prefix: false
+api_backend: openai
+enable_thinking: false  
+thinking_budget: 32768  # Token budget for reasoning
+client_password: null
+history_n: 4
+max_steps: 50
+enable_log: false
+

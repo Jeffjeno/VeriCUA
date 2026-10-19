@@ -1,0 +1,20 @@
+
+model_name: "Qwen3-VL-4B-Thinking-sft-judge"
+api_key: "EMPTY"
+base_url: "http://127.0.0.1:40000/v1"
+max_tokens: 8192
+temperature: 0.0
+history_n: 3
+
+probe_agent_type: "Holo3_Probe"
+probe_model_name: "holo3-1-35b-a3b"
+probe_api_key: "EMPTY"
+probe_base_url: "http://<CLUSTER_HOST_IP>:30000/v1"
+probe_max_tokens: 8192
+probe_temperature: 0.0
+probe_max_steps: 15
+probe_enable_thinking: true
+probe_reasoning_effort: "medium"
+probe_max_trajectory_length: 15
+probe_max_images: 3
+probe_client_password: "password"

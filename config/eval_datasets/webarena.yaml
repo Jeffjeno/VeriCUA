@@ -1,0 +1,5 @@
+name: webarena
+benchmark: webarena_verified
+
+paths:
+  manifest: data/webarena/manifest.jsonl

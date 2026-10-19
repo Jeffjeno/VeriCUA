@@ -1,0 +1,5 @@
+schema_version: 1
+default: mobileworld
+
+datasets:
+  mobileworld: mobileworld.yaml

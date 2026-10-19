@@ -1,0 +1,47 @@
+guirl_env_master_url: http://127.0.0.1:9900
+guirl_rollout_master_url: http://127.0.0.1:9910
+guirl_actor_harness: holo31
+guirl_actor_harness_kwargs:
+  model: Holo3.1-35B-A3B
+  api_key: EMPTY
+  base_url: http://127.0.0.1:40000/v1
+  max_tokens: 1800
+  temperature: 0.8
+  max_trajectory_length: 12
+  max_images: 3
+  client_password: password
+  platform: ubuntu
+  enable_thinking: true
+guirl_actor_max_steps: 15
+guirl_actor_timeout_seconds: 600.0
+guirl_probe_agent_type: Holo3_Probe
+guirl_probe_base_url: http://127.0.0.1:30005/v1
+guirl_probe_model_name: holo3-1-35b-a3b
+guirl_probe_api_key: EMPTY
+guirl_probe_max_tokens: 8192
+guirl_probe_max_steps: 15
+guirl_probe_temperature: 0.0
+guirl_probe_enable_thinking: true
+guirl_probe_reasoning_effort: medium
+guirl_probe_max_trajectory_length: 15
+guirl_probe_max_images: 3
+guirl_probe_client_password: password
+guirl_probe_sleep_after_execution: 2.0
+guirl_probe_artifact_dir: results/guirl_rl_probe
+guirl_judge_max_rounds: 3
+guirl_judge_history_n: 3
+guirl_judge_max_tokens: 24576
+guirl_judge_temperature: 1.0
+guirl_judge_enable_thinking: true
+guirl_judge_strip_history_thinking: true
+guirl_judge_fanout_turns: true
+guirl_allow_missing_thinking_template: false
+guirl_judge_parse_max_retries: 3
+guirl_judge_model_name: null
+guirl_mm_pool_size: 32
+guirl_mm_per_image_cache: true
+guirl_manifest_path: evaluation_examples/sft_tasks.json
+guirl_examples_dir: evaluation_examples/examples
+guirl_batch_size: 8
+guirl_env_capacity: 8
+guirl_close_env_after_generate: true

@@ -1,0 +1,3 @@
+import slime_plugins.megatron_bridge.glm4v_moe
+import slime_plugins.megatron_bridge.minicpmv
+import slime_plugins.megatron_bridge.minicpmv46

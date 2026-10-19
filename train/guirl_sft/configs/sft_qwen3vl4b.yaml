@@ -1,0 +1,27 @@
+name: qwen3vl4b
+guirl_config: train/guirl_sft/configs/shared_judge_probe.yaml
+
+actor:
+  harness: qwen3vl
+  model: Qwen3-VL-4B-Thinking
+  api_base: http://127.0.0.1:30002/v1
+  api_key: EMPTY
+  max_tokens: 4096
+  temperature: 1.0
+  request_timeout: 1800
+  coordinate_type: relative
+  history_n: 4
+  image_max: 5
+  fold_size: 2
+  enable_thinking: false
+
+run:
+  split: sft_tasks
+  num_vms: 8
+  num_rollouts: 2
+  max_steps: 30
+  max_eval_rounds: 3
+  output_dir: results/guirl_sft_qwen3vl4b
+  settle_time: 20
+  sleep_after_exec: 2
+  headless: true

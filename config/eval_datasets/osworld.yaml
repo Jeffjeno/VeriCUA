@@ -1,0 +1,24 @@
+name: osworld
+description: "Replay-stable judge evaluation set selected from OSWorld examples and trajectories."
+
+paths:
+  test_all_meta_path: data/osworld/manifest.json
+  test_config_base_dir: data/osworld
+  examples_subdir: examples
+  source_result_root: data/osworld/trajectories
+
+policy:
+  agent_type: Replay
+  source_model_name: osworld
+  run_name: osworld-replay
+  stamp: ""
+  default_rollout_id: "0"
+  source_rollout_repeat: 4
+  strict_missing: true
+  max_steps: 50
+  enable_log: false
+
+rollout:
+  task_n_combinations: 4
+  max_steps: 50
+  # NOTE: no result_dir — run_replay_eval would overwrite --result_dir if set here.
