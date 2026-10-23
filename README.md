@@ -91,11 +91,14 @@ bash train/rft/run.sh         # trainer
 ## Citation
 
 ```bibtex
-@misc{wang2026vericua,
-  title  = {VeriCUA: Learning Proactive Verification for Reliable GUI Agent Rewards},
-  author = {Zhizhou Wang and Yaxi Lu and Zhong Zhang and Zikun Hu and Xin Cong and Yankai Lin and Fangming Liu},
-  year   = {2026},
-  note   = {Preprint}
+@misc{wang2026vericualearningproactiveverification,
+      title={VeriCUA: Learning Proactive Verification for Reliable GUI Agent Rewards}, 
+      author={Zhizhou Wang and Yaxi Lu and Zhong Zhang and Zikun Hu and Xin Cong and Yankai Lin and Fangming Liu},
+      year={2026},
+      eprint={2610.26469},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2610.26469}, 
 }
 ```
 
